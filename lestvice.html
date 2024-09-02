@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="sl">
+  <head>
+    <meta charset="utf-8" />
+    <title>Lestvice</title>
+    <style>
+      body {
+        display: grid;
+        place-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      ul {
+        list-style-type: none;
+        list-style-position: inside;
+        text-align: center;
+      }
+      li {
+        padding-bottom:1em;
+      }
+    </style>
+    <script type="module">
+      let keys = [
+        { value: "C", weight: 10 },
+        { value: "C#", weight: 1 },
+        { value: "D", weight: 10 },
+        { value: "Eb", weight: 5 },
+        { value: "E", weight: 3 },
+        { value: "F", weight: 10 },
+        { value: "F#", weight: 2 },
+        { value: "G", weight: 10 },
+        { value: "Ab", weight: 3 },
+        { value: "A", weight: 5 },
+        { value: "Bb", weight: 7 },
+        { value: "B", weight: 3 },
+      ];
+
+      let types = [
+        { value: "dur", weight: 10 },
+        { value: "naravni mol", weight: 4 },
+        { value: "melodični mol", weight: 1 },
+        { value: "harmonični mol", weight: 5 },
+        { value: "dorska", weight: 7 },
+        { value: "frigijska", weight: 2 },
+        { value: "lidijska", weight: 2 },
+        { value: "miksolidijska", weight: 10 },
+        { value: "lokrijska", weight: 5 },
+      ];
+
+      function getRandomWeightedValue(options) {
+        const totalWeight = options.reduce(
+          (sum, option) => sum + option.weight,
+          0
+        );
+        let randomNum = Math.random() * totalWeight;
+
+        // 3. Izberi možnost na podlagi uteži
+        for (let i = 0; i < options.length; i++) {
+          const option = options[i];
+          randomNum -= option.weight;
+          if (randomNum <= 0) {
+            return option.value;
+          }
+        }
+      }
+
+      function getRandomScale() {
+        let key = getRandomWeightedValue(keys);
+        let type = getRandomWeightedValue(types);
+        return `${key} ${type}`;
+      }
+
+      function init() {
+        let scales = [];
+        while (scales.length < 5) {
+          let randomScale = getRandomScale();
+          console.log(`randomScale: ${randomScale}`);
+          if (!scales.find((scale) => scale === randomScale)) {
+            scales.push(randomScale);
+            console.log(`scales: ${randomScale}`, scales);
+          }
+        }
+        let ul = document.querySelector("ul");
+        ul.innerHTML = "";
+        for (let scale of scales) {
+          let li = document.createElement("li");
+          li.innerHTML = getRandomScale();
+          ul.appendChild(li);
+        }
+
+        document.body.onclick = () => {
+          init();
+        };
+      }
+
+      init();
+    </script>
+  </head>
+  <body>
+    <ul style="font-size: 64pt"></ol>
+  </body>
+</html>
