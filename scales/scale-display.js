@@ -3,7 +3,6 @@ import { getScaleLetters } from "./scales-api.js";
 
 class ScaleDisplay extends HTMLElement {
   async connectedCallback() {
-    console.log(`ScaleDisplay connectedCallback ...`);
     this.render();
   }
 
