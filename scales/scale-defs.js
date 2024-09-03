@@ -78,10 +78,49 @@ let chromaticLetterToStepMap = (() => {
   return map;
 })();
 
-export function getLetterByStep(step) {
-  return Array.from(chromaticLetterToStepMap).find(
-    ([key, value]) => value === step
-  )?.[0];
+function isFlat(str) {
+  return str.includes("b");
+}
+
+function isSharp(str) {
+  return str.includes("#");
+}
+
+function isNatural(str) {
+  return !isFlat(str) && !isSharp(str);
+}
+
+function countFlat(str) {
+  return str.split("b").length - 1;
+}
+
+function countSharp(str) {
+  return str.split("#").length - 1;
+}
+
+export function getLetterByStep(step, sharp = undefined) {
+  step %= 12;
+  while (step < 0) {
+    step += 12;
+  }
+  let values = Array.from(chromaticLetterToStepMap)
+    .filter(([key, value]) => value === step)
+    .map((entry) => entry[0]);
+  if (!values?.length) {
+    console.warn(`getLetterByStep: failed to find any letter for step=${step}`);
+    return undefined;
+  }
+  let naturalValue = values.find((value) => isNatural(value));
+  if (naturalValue) {
+    return naturalValue;
+  }
+  if (sharp) {
+    let sharpValue = values.find((value) => isSharp(value));
+    if (sharpValue) {
+      return sharpValue;
+    }
+  }
+  return values[0];
 }
 
 export function getScaleTypeNames() {
