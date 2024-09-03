@@ -121,6 +121,10 @@ function getLetterByStep(step, sharp = undefined) {
   return values[0];
 }
 
+function getScalesCount() {
+  return scaleTypes.length;
+}
+
 function getScaleTypeNames() {
   return scaleTypes.map((type) => type.name);
 }
@@ -173,7 +177,7 @@ function getToneLetter(key = "C", tone = "1", sharp) {
   return getLetterByStep(step, sharp);
 }
 
-function getScaleLetters(key = "C", type = "major") {
+export function getScaleLetters(key = "C", type = "major") {
   let scale = getScaleTypeByName(type);
   if (!scale) {
     console.warn(`getScaleLetters: scale type=${type} not found`);
@@ -181,7 +185,3 @@ function getScaleLetters(key = "C", type = "major") {
   }
   return scale.tones.map((tone) => getToneLetter(key, tone));
 }
-
-console.log(
-  `getScaleLetters("Bb", "minor"): ${getScaleLetters("Bb", "minor")}`
-);
