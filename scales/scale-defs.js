@@ -1,9 +1,3 @@
-import { setConsoleContainer, isLocalhost } from "./utils.js";
-
-if (isLocalhost()) {
-  setConsoleContainer(document.getElementById("console-container"));
-}
-
 let scaleTypes = [
   {
     name: "major",
