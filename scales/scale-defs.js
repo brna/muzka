@@ -72,6 +72,12 @@ let chromaticLetterToStepMap = (() => {
   return map;
 })();
 
+export function getLetterByStep(step) {
+  return Array.from(chromaticLetterToStepMap).find(
+    ([key, value]) => value === step
+  )?.[0];
+}
+
 export function getScaleTypeNames() {
   return scaleTypes.map((type) => type.name);
 }
@@ -111,10 +117,13 @@ export function getChromaticStepByTone(tone = "1") {
   }
 
   let numberOfOctaves = Math.floor(toneNumber / 7);
-  let baseIndex = (toneNumber % 7) - 1;
+  let baseIndex = (toneNumber + 11) % 7;
   let baseStep = baseToneChromaticSteps[baseIndex];
 
   if (baseStep === undefined) {
+    console.log(
+      `getChromaticStepByTone: baseStep for tone=${tone} not found for baseIndex=${baseIndex}`
+    );
     return undefined;
   }
 
@@ -123,26 +132,38 @@ export function getChromaticStepByTone(tone = "1") {
   return numberOfOctaves * 12 + baseStep + diff;
 }
 
-export function getToneLetter(key = "C", tone = "1") {
+export function getToneLetterOld(key = "C", tone = "1") {
   let toneIndex = parseInt(tone.replace(/\D/g, "")) - 1;
   if (isNaN(toneIndex)) {
+    console.log(
+      `getToneLetterOld: toneIndex for key=${key} and tone=${tone} not found`
+    );
     return undefined;
   }
 
   let keyMatch = key.match(/[A-G]/);
   let keyLetter = keyMatch ? keyMatch[0] : null;
   if (!keyLetter) {
+    console.log(
+      `getToneLetterOld: keyLetter for key=${key} and tone=${tone} not found`
+    );
     return undefined;
   }
 
   let keyIndex = baseChromaticLetters.indexOf(keyLetter);
   if (keyIndex === -1) {
+    console.log(
+      `getToneLetterOld: keyIndex for key=${key} and tone=${tone} not found`
+    );
     return undefined;
   }
 
   let letterIndex = (keyIndex + toneIndex) % 7;
   let baseLetter = baseChromaticLetters[letterIndex];
   if (!baseLetter) {
+    console.log(
+      `getToneLetterOld: baseLetter for key=${key} and tone=${tone} not found`
+    );
     return undefined;
   }
 
@@ -155,12 +176,36 @@ export function getToneLetter(key = "C", tone = "1") {
   return baseLetter + (diff > 0 ? "#" : "b").repeat(Math.abs(diff));
 }
 
+export function getToneLetterNew(key = "C", tone = "1") {
+  let toneIndex = parseInt(tone.replace(/\D/g, "")) - 1;
+  if (isNaN(toneIndex)) {
+    console.log(
+      `getToneLetterNew: toneIndex for key=${key} and tone=${tone} not found`
+    );
+    return undefined;
+  }
+
+  let keyStep = chromaticLetterToStepMap.get(key);
+  if (!keyStep) {
+    console.log(
+      `getToneLetterNew: keyStep for key=${key} and tone=${tone} not found`
+    );
+    return undefined;
+  }
+
+  let toneStep = getChromaticStepByTone(tone);
+
+  let step = (keyStep + toneStep + 12) % 12;
+
+  return getLetterByStep(step);
+}
+
 function getScaleLetters(key = "C", type = "major") {
   let scale = getScaleTypeByName(type);
   if (!scale) {
     return undefined;
   }
-  return scale.tones.map((tone) => getToneLetter(key, tone));
+  return scale.tones.map((tone) => getToneLetterNew(key, tone));
 }
 
 console.log(`getScaleLetters("F", "major"): ${getScaleLetters("F", "major")}`);
