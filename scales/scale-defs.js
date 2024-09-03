@@ -53,8 +53,24 @@ let scaleTypes = [
   },
 ];
 
-let baseToneChromaticSteps = [0, 2, 4, 5, 6, 7, 9, 11];
+let baseToneChromaticSteps = [0, 2, 4, 5, 7, 9, 11];
 let baseChromaticLetters = ["C", "D", "E", "F", "G", "A", "B"];
+
+let chromaticLetterToStepMap = (() => {
+  let keys = baseChromaticLetters;
+  let steps = baseToneChromaticSteps;
+  let map = new Map();
+  for (let i = 0; i < 7; i++) {
+    map.set(keys[i], steps[i]);
+  }
+  for (let i = 0; i < 7; i++) {
+    map.set(`${keys[i]}b`, (steps[i] + 11) % 12);
+  }
+  for (let i = 0; i < 7; i++) {
+    map.set(`${keys[i]}#`, (steps[i] + 1) % 12);
+  }
+  return map;
+})();
 
 export function getScaleTypeNames() {
   return scaleTypes.map((type) => type.name);
@@ -146,6 +162,8 @@ function getScaleLetters(key = "C", type = "major") {
   }
   return scale.tones.map((tone) => getToneLetter(key, tone));
 }
+
+console.log(`getScaleLetters("F", "major"): ${getScaleLetters("F", "major")}`);
 
 console.log(`getScaleLetters("G", "major"): ${getScaleLetters("G", "major")}`);
 
