@@ -39,7 +39,7 @@ class ScaleDisplay extends HTMLElement {
     render(
       html`
         <div
-          class="d-flex bg-secondary"
+          class="row bg-secondary"
           style="padding-top:1px;padding-bottom:1px"
         >
           ${this.keys.map(
@@ -48,7 +48,7 @@ class ScaleDisplay extends HTMLElement {
                 @click=${this.onKeyClick}
                 value="${key}"
                 type="button"
-                class="btn btn-sm w-100 ${key === this.key
+                class="col btn btn-lg wx-100 ${key === this.key
                   ? "btn-primary"
                   : isNatural(key)
                   ? "btn-light"
@@ -78,7 +78,7 @@ class ScaleDisplay extends HTMLElement {
         <div class="d-flex">
           ${this.scaleLetters.map(
             (letter) =>
-              html`<button type="button" class="btn btn-lg btn-light w-100">
+              html`<button type="button" class="btn btn-sm btn-light w-100">
                 ${letter}
               </button>`
           )}
