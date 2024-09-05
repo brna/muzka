@@ -143,12 +143,16 @@ function getScalesCount() {
   return scaleTypes.length;
 }
 
-function getScaleTypeNames() {
+export function getScaleTypeNames() {
   return scaleTypes.map((type) => type.name);
 }
 
-function getScaleTypeByName(name = "major") {
-  return scaleTypes.find((type) => type.name === name);
+export function getScaleTypeByName(name = "major") {
+  let scaleType = scaleTypes.find((type) => type.name === name);
+  if (scaleType === undefined) {
+    console.warn(`scale-api.js getScaleTypeByName: {name} not found`);
+  }
+  return scaleType;
 }
 
 function getToneStep(tone = "1") {
@@ -182,7 +186,7 @@ function getToneLetter(key = "C", tone = "1", sharp) {
     }
   }
   let keyStep = chromaticLetterToStepMap.get(key);
-  if (!keyStep) {
+  if (keyStep === undefined) {
     console.warn(
       `getToneLetter: keyStep for key=${key} and tone=${tone} not found`
     );
