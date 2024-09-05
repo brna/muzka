@@ -1,3 +1,3 @@
 # muzka
 
-[lestvice](lestvice.html)
+[scales](scales/index.html)
