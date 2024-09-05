@@ -39,7 +39,7 @@ class ScaleDisplay extends HTMLElement {
     render(
       html`
         <div
-          class="row bg-secondary"
+          class="row mt-4 mb-4 bg-secondary"
           style="padding-top:1px;padding-bottom:1px"
         >
           ${this.keys.map(
@@ -59,7 +59,7 @@ class ScaleDisplay extends HTMLElement {
               </button>`
           )}
         </div>
-        <div class="row p-2 pe-4">
+        <div class="row mt-4 mb-4 p-2 pe-4">
           ${this.scaleTypeNames.map(
             (name) =>
               html`<button
