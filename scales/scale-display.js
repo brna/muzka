@@ -38,51 +38,59 @@ class ScaleDisplay extends HTMLElement {
   render() {
     render(
       html`
-        <div
-          class="row mt-4 mb-4 bg-secondary"
-          style="padding-top:1px;padding-bottom:1px"
-        >
-          ${this.keys.map(
-            (key) =>
-              html`<button
-                @click=${this.onKeyClick}
-                value="${key}"
-                type="button"
-                class="col btn btn-lg wx-100 ${key === this.key
-                  ? "btn-primary"
-                  : isNatural(key)
-                  ? "btn-light"
-                  : "btn-dark"}"
-                style="margin-left:0.5px;margin-right:0.5px"
-              >
-                ${key}
-              </button>`
-          )}
-        </div>
-        <div class="row mt-4 mb-4 p-2 pe-4">
-          ${this.scaleTypeNames.map(
-            (name) =>
-              html`<button
-                @click=${this.onScaleTypeNameClick}
-                value="${name}"
-                type="button"
-                class="col btn btn-sm ms-1 ${name === this.scaleType.name
-                  ? "btn-danger"
-                  : "btn-outline-dark"}"
-              >
-                <span class="fs-6">${name}</span>
-              </button>`
-          )}
-        </div>
-        <h1 class="mt-4 text-center">${this.key} ${this.scaleType.name}</h1>
-        <div class="d-flex">
-          ${this.scaleLetters.map(
-            (letter) =>
-              html`<button type="button" class="btn btn-sm btn-light w-100">
-                ${letter}
-              </button>`
-          )}
-          <div></div>
+        <div class="ps-2 pe-2">
+          <div
+            class="row p-2 bg-secondary"
+            style="padding-top:1px;padding-bottom:1px"
+          >
+            ${this.keys.map(
+              (key) =>
+                html`<button
+                  @click=${this.onKeyClick}
+                  value="${key}"
+                  type="button"
+                  class="col btn btn-sm w-100 ${key === this.key
+                    ? "btn-primary"
+                    : isNatural(key)
+                    ? "btn-light"
+                    : "btn-dark"}"
+                  style="margin-left:0.5px;margin-right:0.5px"
+                >
+                  ${key}
+                </button>`
+            )}
+          </div>
+          <div class="row p-2 pt-1 pb-1 bg-warning">
+            ${this.scaleTypeNames.map(
+              (name) =>
+                html`<button
+                  @click=${this.onScaleTypeNameClick}
+                  value="${name}"
+                  type="button"
+                  class="col btn btn-sm ms-1 ${name === this.scaleType.name
+                    ? "btn-danger"
+                    : "bg-warning-subtle"}"
+                  style="margin-top:1px; margin-bottom:1px"
+                >
+                  <span class="fs-6">${name}</span>
+                </button>`
+            )}
+          </div>
+          <h1 class="mt-2 text-center fw-bold">
+            ${this.key} ${this.scaleType.name}
+          </h1>
+          <div class="d-flex">
+            ${this.scaleLetters.map(
+              (letter) =>
+                html`<button
+                  type="button"
+                  class="btn btn-sm btn-light w-100 fw-bold"
+                >
+                  ${letter}
+                </button>`
+            )}
+            <div></div>
+          </div>
         </div>
       `,
       this,
