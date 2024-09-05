@@ -2,8 +2,10 @@ import { html, render } from "../libs/lit-3/lit-all.min.js";
 import {
   getChromaticLetters,
   getScaleLetters,
+  getScaleLetterPairs,
   getScaleTypeNames,
   getScaleTypeByName,
+  getScaleTypeTones,
   isNatural,
 } from "./scales-api.js";
 
@@ -30,8 +32,28 @@ class ScaleDisplay extends HTMLElement {
     this.render();
   }
 
+  get scaleTypeTones() {
+    let values = getScaleTypeTones(this.scaleType.name);
+    return [...values, values[0]];
+  }
+
   get scaleLetters() {
     let values = getScaleLetters(this.key, this.scaleType.name);
+    return [...values, values[0]];
+  }
+
+  get thirdAboveScaleLetters() {
+    let values = getScaleLetterPairs(this.key, this.scaleType.name, 2);
+    return [...values, values[0]];
+  }
+
+  get fifthAboveScaleLetters() {
+    let values = getScaleLetterPairs(this.key, this.scaleType.name, 4);
+    return [...values, values[0]];
+  }
+
+  get sixthBellowScaleLetters() {
+    let values = getScaleLetterPairs(this.key, this.scaleType.name, -5);
     return [...values, values[0]];
   }
 
@@ -79,18 +101,80 @@ class ScaleDisplay extends HTMLElement {
           <h1 class="mt-2 text-center fw-bold">
             ${this.key} ${this.scaleType.name}
           </h1>
-          <div class="d-flex">
-            ${this.scaleLetters.map(
-              (letter) =>
-                html`<button
-                  type="button"
-                  class="btn btn-sm btn-light w-100 fw-bold"
-                >
-                  ${letter}
-                </button>`
-            )}
-            <div></div>
-          </div>
+          <table class="table mt-2 border border-5 fs-3">
+            <tr class="fs-6">
+              ${this.scaleTypeTones.map(
+                (tone) => html`<th class="bg-secondary-subtle">${tone}</th>`
+              )}
+            </tr>
+            <tr>
+              ${this.scaleLetters.map(
+                (letter) => html`<td class="fw-bold">${letter}</td>`
+              )}
+            </tr>
+          </table>
+          <table class="table mt-2 border border-5 fs-3">
+            <tr>
+              ${this.thirdAboveScaleLetters.map(
+                (letter) => html`<td class="bg-warning-subtle">${letter}</td>`
+              )}
+            </tr>
+            <tr>
+              ${this.scaleLetters.map(
+                (letter) =>
+                  html`<td class="bg-warning-subtle fw-bold">${letter}</td>`
+              )}
+            </tr>
+          </table>
+          <table class="table mt-2 border border-5 fs-3">
+            <tr>
+              ${this.scaleLetters.map(
+                (letter) =>
+                  html`<td class="bg-success-subtle fw-bold">${letter}</td>`
+              )}
+            </tr>
+            <tr>
+              ${this.sixthBellowScaleLetters.map(
+                (letter) => html`<td class="bg-success-subtle">${letter}</td>`
+              )}
+            </tr>
+          </table>
+          <table class="table mt-2 border border-5 fs-3">
+            <tr>
+              ${this.fifthAboveScaleLetters.map(
+                (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
+              )}
+            </tr>
+            <tr>
+              ${this.thirdAboveScaleLetters.map(
+                (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
+              )}
+            </tr>
+            <tr>
+              ${this.scaleLetters.map(
+                (letter) =>
+                  html`<td class="bg-danger-subtle fw-bold">${letter}</td>`
+              )}
+            </tr>
+          </table>
+          <table class="table mt-2 border border-5 fs-3">
+            <tr>
+              ${this.scaleLetters.map(
+                (letter) =>
+                  html`<td class="bg-info-subtle fw-bold">${letter}</td>`
+              )}
+            </tr>
+            <tr>
+              ${this.fifthAboveScaleLetters.map(
+                (letter) => html`<td class="bg-info-subtle">${letter}</td>`
+              )}
+            </tr>
+            <tr>
+              ${this.sixthBellowScaleLetters.map(
+                (letter) => html`<td class="bg-info-subtle">${letter}</td>`
+              )}
+            </tr>
+          </table>
         </div>
       `,
       this,
