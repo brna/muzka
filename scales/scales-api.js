@@ -155,6 +155,10 @@ export function getScaleTypeByName(name = "major") {
   return scaleType;
 }
 
+export function getScaleTypeTones(name = "major") {
+  return getScaleTypeByName(name)?.tones;
+}
+
 function getToneStep(tone = "1") {
   let toneNumber = parseInt(tone.replace(/\D/g, ""));
   if (isNaN(toneNumber)) {
@@ -206,4 +210,21 @@ export function getScaleLetters(key = "C", type = "major") {
     return undefined;
   }
   return scale.tones.map((tone) => getToneLetter(key, tone));
+}
+
+export function getScaleLetterPairs(key = "C", type = "major", shift = 2) {
+  let baseValues = getScaleLetters(key, type);
+  let n = baseValues.length;
+  let pairValues = [];
+  for (let i = 0; i < n; i++) {
+    let index = i + shift;
+    while (index < 0) {
+      index += n;
+    }
+    index %= n;
+
+    let value = baseValues[index];
+    pairValues.push(value);
+  }
+  return pairValues;
 }
