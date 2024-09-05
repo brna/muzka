@@ -55,6 +55,24 @@ let scaleTypes = [
 
 let baseToneChromaticSteps = [0, 2, 4, 5, 7, 9, 11];
 let baseChromaticLetters = ["C", "D", "E", "F", "G", "A", "B"];
+let chromaticLetters = [
+  "C",
+  "C#",
+  "D",
+  "Eb",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "Ab",
+  "A",
+  "Bb",
+  "B",
+];
+
+export function getChromaticLetters() {
+  return chromaticLetters;
+}
 
 let chromaticLetterToStepMap = (() => {
   let keys = baseChromaticLetters;
@@ -72,15 +90,15 @@ let chromaticLetterToStepMap = (() => {
   return map;
 })();
 
-function isFlat(str) {
+export function isFlat(str) {
   return str.includes("b");
 }
 
-function isSharp(str) {
+export function isSharp(str) {
   return str.includes("#");
 }
 
-function isNatural(str) {
+export function isNatural(str) {
   return !isFlat(str) && !isSharp(str);
 }
 
