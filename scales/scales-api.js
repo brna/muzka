@@ -230,6 +230,24 @@ export function getScaleTypeByName(name = "major") {
   return scaleType;
 }
 
+export function getModalScale(scaleType, tone) {
+  let modes = scaleType?.modes;
+  if (!modes.length) {
+    return undefined;
+  }
+  let mode = modes.find((entry) => (entry.start = tone));
+  if (!mode) {
+    return;
+  }
+  let modalScale = getScaleTypeByName(mode.name);
+  if (!modalScale) {
+    console.warn(
+      `scale-api.js getModalScale: modal scale {mode.name} not found. Base scale: ${scaleType.name}`
+    );
+  }
+  return modalScale;
+}
+
 function getToneStep(tone = "1") {
   let toneNumber = parseInt(tone.replace(/\D/g, ""));
   if (isNaN(toneNumber)) {
