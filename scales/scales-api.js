@@ -249,5 +249,26 @@ export function getScaleLetterPairs(
       pairValues.push(pairValues[i]);
     }
   }
+
   return pairValues;
+}
+
+function transpose(table) {
+  return table[0].map((_, colIndex) => table.map((row) => row[colIndex]));
+}
+
+export function getScaleChords(
+  key = "C",
+  type = "major",
+  chord = [0, 2, 4],
+  more = 1
+) {
+  let table = [];
+  for (let shift of chord) {
+    let pairs = getScaleLetterPairs(key, type, shift, more);
+    console.log(`pairs ${shift}: `, pairs);
+    table.push(pairs);
+  }
+
+  return transpose(table);
 }
