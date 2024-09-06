@@ -34,7 +34,7 @@ let scaleTypes = [
   },
   {
     name: "phrygian dominant",
-    aliases: ["freygish", "dominant flat 2 flat 6"],
+    aliases: ["freygish"],
     tones: ["1", "b2", "3", "4", "5", "b6", "b7"],
     tonality: "b3",
     modes: [{ name: "harmonic minor", start: "5" }],
