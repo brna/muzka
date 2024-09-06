@@ -260,13 +260,12 @@ function transpose(table) {
 export function getScaleChords(
   key = "C",
   type = "major",
-  chord = [0, 2, 4],
+  shifts = [0, 2, 4],
   more = 1
 ) {
   let table = [];
-  for (let shift of chord) {
+  for (let shift of shifts) {
     let pairs = getScaleLetterPairs(key, type, shift, more);
-    console.log(`pairs ${shift}: `, pairs);
     table.push(pairs);
   }
 
