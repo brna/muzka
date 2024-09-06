@@ -1,4 +1,4 @@
-import { html, render } from "../libs/lit-3/lit-all.min.js";
+import { html, render, join } from "../libs/lit-3/lit-all.min.js";
 import {
   getChromaticLetters,
   getScaleLetters,
@@ -7,7 +7,10 @@ import {
   getScaleTypeByName,
   getScaleTypeTones,
   isNatural,
+  getScaleChords,
 } from "./scales-api.js";
+
+getScaleChords();
 
 class ScaleDisplay extends HTMLElement {
   async connectedCallback() {
@@ -77,112 +80,21 @@ class ScaleDisplay extends HTMLElement {
     </table>`;
   }
 
-  get triadsFromBaseHtml() {
-    return html` <table class="table mt-2 border border-5 fs-3">
+  getChordsHtml(shifts) {
+    let chords = getScaleChords(this.key, this.scaleType.name, shifts);
+    return html`<table class="table mt-2 border border-5 fs-3">
       <tr>
-        ${getScaleLetterPairs(this.key, this.scaleType.name, 4).map(
-          (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetterPairs(this.key, this.scaleType.name, 2).map(
-          (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
-          (letter) => html`<td class="bg-danger-subtle fw-bold">${letter}</td>`
-        )}
-      </tr>
-    </table>`;
-  }
-
-  get triadsFromThirdsHtml() {
-    return html` <table class="table mt-2 border border-5 fs-3">
-      <tr>
-        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
-          (letter) => html`<td class="bg-info-subtle fw-bold">${letter}</td>`
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetterPairs(this.key, this.scaleType.name, 4).map(
-          (letter) => html`<td class="bg-info-subtle">${letter}</td>`
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetterPairs(this.key, this.scaleType.name, -5).map(
-          (letter) => html`<td class="bg-info-subtle">${letter}</td>`
-        )}
-      </tr>
-    </table>`;
-  }
-
-  get triadsFromThirdsHtml() {
-    return html` <table class="table mt-2 border border-5 fs-3">
-      <tr>
-        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
-          (letter) => html`<td class="bg-info-subtle fw-bold">${letter}</td>`
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetterPairs(this.key, this.scaleType.name, 4).map(
-          (letter) => html`<td class="bg-info-subtle">${letter}</td>`
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetterPairs(this.key, this.scaleType.name, -5).map(
-          (letter) => html`<td class="bg-info-subtle">${letter}</td>`
-        )}
-      </tr>
-    </table>`;
-  }
-
-  get triadsFromFifthsHtml() {
-    return html` <table class="table mt-2 border border-5 fs-3">
-      <tr>
-        ${getScaleLetterPairs(this.key, this.scaleType.name, -5).map(
-          (letter) => html`<td class="bg-info-subtle">${letter}</td>`
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
-          (letter) => html`<td class="bg-info-subtle fw-bold">${letter}</td>`
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetterPairs(this.key, this.scaleType.name, 4).map(
-          (letter) => html`<td class="bg-info-subtle">${letter}</td>`
-        )}
-      </tr>
-    </table>`;
-  }
-
-  get tetradsFromBaseHtml() {
-    return html` <table class="table mt-2 border border-5 fs-3">
-      <tr>
-        ${getScaleLetterPairs(this.key, this.scaleType.name, 6).map(
-          (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetterPairs(this.key, this.scaleType.name, 4).map(
-          (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetterPairs(this.key, this.scaleType.name, 2).map(
-          (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
-          (letter) => html`<td class="bg-danger-subtle fw-bold">${letter}</td>`
+        ${chords.map(
+          (chord) => html`<td>${join(chord.toReversed(), html`<br />`)}</td>`
         )}
       </tr>
     </table>`;
   }
 
   getAccordionItem(id, title, body, expanded) {
+    if (this.scaleType.tones.length < 7) {
+      return undefined;
+    }
     return html`<div class="accordion-item">
       <h2 class="accordion-header">
         <button
@@ -269,25 +181,37 @@ class ScaleDisplay extends HTMLElement {
             ${this.getAccordionItem(
               "triadsFromBaseTable",
               "Triads",
-              this.triadsFromBaseHtml,
+              this.getChordsHtml([0, 2, 4]),
               false
             )}
             ${this.getAccordionItem(
               "triadsFromThirdsTable",
               " Triads starting from the third",
-              this.triadsFromThirdsHtml,
+              this.getChordsHtml([2, 4, 0]),
               false
             )}
             ${this.getAccordionItem(
               "triadsFromFifthsTable",
               "Triads starting from the fifth",
-              this.triadsFromFifthsHtml,
+              this.getChordsHtml([4, 0, 2]),
               false
             )}
             ${this.getAccordionItem(
               "tetradsFromBaseTable",
               "Tetrads",
-              this.tetradsFromBaseHtml,
+              this.getChordsHtml([0, 2, 4, 6]),
+              false
+            )}
+            ${this.getAccordionItem(
+              "pentatonics69",
+              "Pentatonics 6/9",
+              this.getChordsHtml([0, 1, 2, 4, 5]),
+              false
+            )}
+            ${this.getAccordionItem(
+              "pentatonics79",
+              "Pentatonics 7/9",
+              this.getChordsHtml([0, 1, 2, 4, 6]),
               false
             )}
           </div>
