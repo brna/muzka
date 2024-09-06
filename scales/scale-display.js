@@ -30,8 +30,6 @@ class ScaleDisplay extends HTMLElement {
 
   onScaleTypeNameClick(event) {
     this.scaleType = getScaleTypeByName(event.currentTarget.value);
-    console.log("sevent.currentTarget.value: ", event.currentTarget.value);
-    console.log("selected scale type: ", this.scaleType);
     this.render();
   }
 
