@@ -8,6 +8,7 @@ import {
   getScaleTypeTones,
   isNatural,
   getScaleChords,
+  getModalScale,
 } from "./scales-api.js";
 
 getScaleChords();
@@ -17,19 +18,60 @@ class ScaleDisplay extends HTMLElement {
     this.keys = getChromaticLetters();
     this.scaleTypeNames = getScaleTypeNames();
 
-    this.key = "C";
-    this.scaleType = getScaleTypeByName("major");
+    let searchParams = new URLSearchParams(window.location.search);
+    console.log(`location=${location}, searchParams=`, searchParams);
+
+    let key = searchParams.get("key");
+    console.log(
+      `### this.keys.includes(${key}): ${this.keys.includes(key)}`,
+      this.keys
+    );
+    if (key && this.keys.includes(key)) {
+      this.key = key;
+    }
+    this.key ??= "C";
+
+    let scale = searchParams.get("scale");
+    if (scale && this.scaleTypeNames.includes(scale)) {
+      this.scaleType = getScaleTypeByName(scale);
+    }
+    this.scaleType ??= getScaleTypeByName("major");
+
+    this.updateUrl();
 
     this.render();
   }
 
+  updateUrl() {
+    let searchParams = new URLSearchParams(window.location.search);
+    searchParams.set("key", this.key);
+    searchParams.set("scale", this.scaleType.name);
+    const url =
+      window.location.origin +
+      window.location.pathname +
+      "?" +
+      searchParams.toString();
+    if (window.location.href !== url) {
+      window.location.href = url; // reload
+    }
+  }
+
+  get() {
+    return new URLSearchParams(document.location.search).get("key");
+  }
+
   onKeyClick(event) {
-    this.key = event.currentTarget.value;
+    this.key = event.currentTarget.value || event.currentTarget.dataset.key;
+    console.log("onKeyClick: key=" + this.key);
+    this.updateUrl();
     this.render();
   }
 
   onScaleTypeNameClick(event) {
-    this.scaleType = getScaleTypeByName(event.currentTarget.value);
+    this.scaleType =
+      getScaleTypeByName(event.currentTarget.value) ||
+      event.currentTarget.dataset.scale;
+    this.updateUrl();
     this.render();
   }
 
@@ -42,7 +84,39 @@ class ScaleDisplay extends HTMLElement {
       </tr>
       <tr>
         ${getScaleLetters(this.key, this.scaleType.name, 1).map(
-          (letter) => html`<td class="fw-bold">${letter}</td>`
+          (letter) =>
+            html`<td class="fw-bold" data-key="${letter}">${letter}</td>`
+        )}
+      </tr>
+      <tr>
+        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
+          (letter, index) => {
+            let modalScale = getModalScale(
+              this.scaleType,
+              this.scaleType.tones[index]
+            );
+            return html`<td
+              class="fw-bold"
+              data-key="${letter}"
+              @click=${this.onKeyClick}
+              style="font-size:8pt"
+            >
+              ${letter} ${this.modalScale?.name}
+            </td>`;
+          }
+        )}
+      </tr>
+      <tr>
+        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
+          (letter) =>
+            html`<td
+              class="fw-bold"
+              data-key="${letter}"
+              @click=${this.onKeyClick}
+              style="font-size:8pt"
+            >
+              ${letter} ${this.scaleType.name}
+            </td>`
         )}
       </tr>
     </table>`;
