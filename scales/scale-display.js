@@ -57,7 +57,6 @@ class ScaleDisplay extends HTMLElement {
 
   getUrl(key, scale) {
     let searchParams = new URLSearchParams(window.location.search);
-    //let urlEncodedKey = encodeURIComponent(key);
     searchParams.set("key", key);
     searchParams.set("scale", scale);
     let loc = window.location;
@@ -110,8 +109,8 @@ class ScaleDisplay extends HTMLElement {
       return undefined;
     }
 
-    return html`<div class="row">
-      <span class="col btn">${this.key} ${this.scaleType.name} modes:</span>
+    return html`<div>
+      <span class="btn">Modal<br />scales:</span>
       ${getScaleLetters(this.key, this.scaleType.name, 1).map(
         (letter, index) => {
           let modalScale = getModalScale(
@@ -123,7 +122,7 @@ class ScaleDisplay extends HTMLElement {
           }
           let url = this.getUrl(letter, modalScale.name);
 
-          return html` <a href="${url}" class="col btn btn-light"
+          return html` <a href="${url}" class="btn btn-light"
             >${convertToRoman(index + 1)}.<br />
             <span class="btn btn-light-outline"
               >${letter} ${modalScale.name}</span
@@ -245,11 +244,12 @@ class ScaleDisplay extends HTMLElement {
           </div>
           <h1 class="mt-2 text-center fw-bold">
             ${this.key} ${this.scaleType.name}
-            ${this.scaleType.aliases?.length
-              ? `(${this.scaleType.aliases.join(", ")})`
-              : undefined}
           </h1>
-
+          ${this.scaleType.aliases?.length
+            ? html`<div class="text-center fs-4">
+                (${this.scaleType.aliases.join(", ")})
+              </div>`
+            : undefined}
           ${this.scaleHtml} ${this.modesHtml}
 
           <div class="accordion" id="accordionTables">
