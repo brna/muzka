@@ -159,6 +159,9 @@ class ScaleDisplay extends HTMLElement {
           </div>
           <h1 class="mt-2 text-center fw-bold">
             ${this.key} ${this.scaleType.name}
+            ${this.scaleType.aliases?.length
+              ? `(${this.scaleType.aliases.join(", ")})`
+              : undefined}
           </h1>
 
           ${this.scaleHtml}
