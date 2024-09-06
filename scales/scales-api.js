@@ -14,37 +14,48 @@ let scaleTypes = [
     ],
   },
   {
-    name: "minor",
-    aliases: ["aeolian"],
-    tones: ["1", "2", "b3", "4", "5", "b6", "b7"],
-    tonality: "3",
-    modes: [
-      { name: "locrian", start: "2" },
-      { name: "major", start: "b3" },
-      { name: "dorian", start: "4" },
-      { name: "phrygian", start: "5" },
-      { name: "lydian", start: "b6" },
-      { name: "mixolydian", start: "b7" },
-    ],
-  },
-  {
     name: "dorian",
-    aliases: [],
-    tones: ["1", "2", "b3", "4", "5", "6", "b7"],
-    tonality: "b7",
+    tones: ["1", "2", "♭3", "4", "5", "6", "♭7"],
+    tonality: "♭7",
     modes: [
       { name: "phrygian", start: "2" },
-      { name: "lydian", start: "b3" },
+      { name: "lydian", start: "♭3" },
       { name: "mixolydian", start: "4" },
       { name: "minor", start: "5" },
       { name: "locrian", start: "6" },
-      { name: "major", start: "b7" },
+      { name: "major", start: "♭7" },
+    ],
+  },
+  {
+    name: "phrygian",
+    tones: ["1", "♭2", "♭3", "4", "5", "♭6", "♭7"],
+    tonality: "♭6",
+    modes: [
+      { name: "lydian", start: "♭2" },
+      { name: "mixolydian", start: "♭3" },
+      { name: "minor", start: "4" },
+      { name: "locrian", start: "6" },
+      { name: "major", start: "♭6" },
+      { name: "dorian", start: "♭7" },
+    ],
+  },
+  {
+    name: "lydian",
+    tones: ["1", "2", "3", "♯4", "5", "6", "7"],
+    tonality: "5",
+    modes: [
+      { name: "mixolydian", start: "2" },
+      { name: "minor", start: "3" },
+      { name: "locrian", start: "♯4" },
+      { name: "major", start: "5" },
+      { name: "dorian", start: "6" },
+      { name: "phrygian", start: "7" },
     ],
   },
   {
     name: "mixolydian",
     aliases: ["dominant"],
-    tones: ["1", "2", "3", "4", "5", "6", "b7"],
+    tones: ["1", "2", "3", "4", "5", "6", "♭7"],
     tonality: "4",
     modes: [
       { name: "minor", start: "2" },
@@ -52,14 +63,41 @@ let scaleTypes = [
       { name: "major", start: "4" },
       { name: "dorian", start: "5" },
       { name: "phrygian", start: "6" },
-      { name: "lydian", start: "b7" },
+      { name: "lydian", start: "♭7" },
+    ],
+  },
+  {
+    name: "minor",
+    aliases: ["aeolian"],
+    tones: ["1", "2", "♭3", "4", "5", "♭6", "♭7"],
+    tonality: "3",
+    modes: [
+      { name: "locrian", start: "2" },
+      { name: "major", start: "♭3" },
+      { name: "dorian", start: "4" },
+      { name: "phrygian", start: "5" },
+      { name: "lydian", start: "♭6" },
+      { name: "mixolydian", start: "♭7" },
+    ],
+  },
+  {
+    name: "locrian",
+    tones: ["1", "♭2", "♭3", "4", "♭5", "♭6", "♭7"],
+    tonality: "♭2",
+    modes: [
+      { name: "major", start: "♭2" },
+      { name: "dorian", start: "♭3" },
+      { name: "phrygian", start: "4" },
+      { name: "lydian", start: "♭5" },
+      { name: "mixolydian", start: "♭6" },
+      { name: "minor", start: "♭7" },
     ],
   },
   {
     name: "harmonic minor",
     aliases: [],
-    tones: ["1", "2", "b3", "4", "5", "b6", "7"],
-    tonality: "b3",
+    tones: ["1", "2", "♭3", "4", "5", "♭6", "7"],
+    tonality: "♭3",
     modes: [
       { name: "romanian minor", start: "2" },
       { name: "phrygian dominant", start: "5" },
@@ -67,19 +105,19 @@ let scaleTypes = [
   },
   {
     name: "romanian minor",
-    aliases: ["dorian #4"],
-    tones: ["1", "2", "b3", "#4", "5", "6", "b7"],
-    tonality: "b7",
+    aliases: ["dorian ♯4"],
+    tones: ["1", "2", "♭3", "♯4", "5", "6", "♭7"],
+    tonality: "♭7",
     modes: [
-      { name: "phrygian dominant", start: "#4" },
-      { name: "harmonic minor", start: "b7" },
+      { name: "phrygian dominant", start: "♯4" },
+      { name: "harmonic minor", start: "♭7" },
     ],
   },
   {
     name: "phrygian dominant",
     aliases: ["freygish"],
-    tones: ["1", "b2", "3", "4", "5", "b6", "b7"],
-    tonality: "b3",
+    tones: ["1", "♭2", "3", "4", "5", "♭6", "♭7"],
+    tonality: "♭3",
     modes: [
       { name: "harmonic minor", start: "4" },
       { name: "romanian minor", start: "5" },
@@ -88,13 +126,13 @@ let scaleTypes = [
   {
     name: "jazz minor",
     aliases: ["melodic minor ascending"],
-    tones: ["1", "2", "b3", "4", "5", "6", "7"],
-    tonality: "b3",
+    tones: ["1", "2", "♭3", "4", "5", "6", "7"],
+    tonality: "♭3",
   },
   {
     name: "double harmonic major",
-    aliases: ["byzantine", "arabic", "gipsy major"],
-    tones: ["1", "b2", "3", "4", "5", "b6", "7"],
+    aliases: ["arabic", "gipsy major"],
+    tones: ["1", "♭2", "3", "4", "5", "♭6", "7"],
     modes: [
       { name: "double harmonic minor", start: "4" },
       { name: "oriental", start: "5" },
@@ -104,7 +142,7 @@ let scaleTypes = [
   {
     name: "double harmonic minor",
     aliases: ["hungarian minor", "gipsy minor"],
-    tones: ["1", "2", "b3", "#4", "5", "b6", "7"],
+    tones: ["1", "2", "♭3", "♯4", "5", "♭6", "7"],
     modes: [
       { name: "oriental", start: "2" },
       { name: "double harmonic major", start: "5" },
@@ -113,18 +151,18 @@ let scaleTypes = [
   },
   {
     name: "oriental",
-    tones: ["1", "b2", "b3", "4", "b5", "6", "b7"],
+    tones: ["1", "♭2", "3", "4", "♭5", "6", "♭7"],
     modes: [
       { name: "double harmonic major", start: "4" },
-      { name: "double harmonic minor", start: "b7" },
+      { name: "double harmonic minor", start: "♭7" },
     ],
     tonality: "7",
   },
   {
     name: "blues",
     aliases: ["blues minor hexatonic"],
-    tones: ["1", "b3", "4", "b5", "5", "b7"],
-    tonality: "b7",
+    tones: ["1", "♭3", "4", "♭5", "5", "♭7"],
+    tonality: "♭7",
   },
 ];
 
@@ -132,16 +170,16 @@ let baseToneChromaticSteps = [0, 2, 4, 5, 7, 9, 11];
 let baseChromaticLetters = ["C", "D", "E", "F", "G", "A", "B"];
 let chromaticLetters = [
   "C",
-  "C#",
+  "C♯",
   "D",
-  "Eb",
+  "E♭",
   "E",
   "F",
-  "F#",
+  "F♯",
   "G",
-  "Ab",
+  "A♭",
   "A",
-  "Bb",
+  "B♭",
   "B",
 ];
 
@@ -157,20 +195,20 @@ let chromaticLetterToStepMap = (() => {
     map.set(keys[i], steps[i]);
   }
   for (let i = 0; i < 7; i++) {
-    map.set(`${keys[i]}b`, (steps[i] + 11) % 12);
+    map.set(`${keys[i]}♭`, (steps[i] + 11) % 12);
   }
   for (let i = 0; i < 7; i++) {
-    map.set(`${keys[i]}#`, (steps[i] + 1) % 12);
+    map.set(`${keys[i]}♯`, (steps[i] + 1) % 12);
   }
   return map;
 })();
 
 export function isFlat(str) {
-  return str.includes("b");
+  return str.includes("♭");
 }
 
 export function isSharp(str) {
-  return str.includes("#");
+  return str.includes("♯");
 }
 
 export function isNatural(str) {
@@ -178,11 +216,11 @@ export function isNatural(str) {
 }
 
 function countFlat(str) {
-  return str.split("b").length - 1;
+  return str.split("♭").length - 1;
 }
 
 function countSharp(str) {
-  return str.split("#").length - 1;
+  return str.split("♯").length - 1;
 }
 
 function diffAccidentals(str) {
@@ -214,6 +252,20 @@ function getLetterByStep(step, sharp = undefined) {
   return values[0];
 }
 
+export function getChromaticLetter(letter, sharp) {
+  let step = chromaticLetterToStepMap.get(letter);
+  if (!step) {
+    console.log(
+      `scales-api.js: getChromaticLetter(${letter}): letter not found in chromaticLetterToStepMap.`
+    );
+    return undefined;
+  }
+  if (isNatural(letter)) {
+    return letter;
+  }
+  return getLetterByStep(step, sharp);
+}
+
 function getScalesCount() {
   return scaleTypes.length;
 }
@@ -225,7 +277,7 @@ export function getScaleTypeNames() {
 export function getScaleTypeByName(name = "major") {
   let scaleType = scaleTypes.find((type) => type.name === name);
   if (scaleType === undefined) {
-    console.warn(`scale-api.js getScaleTypeByName: {name} not found`);
+    console.warn(`scale-api.js getScaleTypeByName: ${name} not found`);
   }
   return scaleType;
 }
@@ -235,15 +287,16 @@ export function getModalScale(scaleType, tone) {
   if (!modes.length) {
     return undefined;
   }
-  let mode = modes.find((entry) => (entry.start = tone));
+  let mode = modes.find((entry) => entry.start === tone);
   if (!mode) {
     return;
   }
   let modalScale = getScaleTypeByName(mode.name);
   if (!modalScale) {
     console.warn(
-      `scale-api.js getModalScale: modal scale {mode.name} not found. Base scale: ${scaleType.name}`
+      `scale-api.js getModalScale: modal scale ${mode.name} not found. Base scale: ${scaleType.name}.`
     );
+    return undefined;
   }
   return modalScale;
 }
