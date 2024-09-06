@@ -52,6 +52,16 @@ class ScaleDisplay extends HTMLElement {
     return [...values, values[0]];
   }
 
+  get sixthAboveScaleLetters() {
+    let values = getScaleLetterPairs(this.key, this.scaleType.name, 5);
+    return [...values, values[0]];
+  }
+
+  get seventhAboveScaleLetters() {
+    let values = getScaleLetterPairs(this.key, this.scaleType.name, 6);
+    return [...values, values[0]];
+  }
+
   get sixthBellowScaleLetters() {
     let values = getScaleLetterPairs(this.key, this.scaleType.name, -5);
     return [...values, values[0]];
@@ -102,7 +112,7 @@ class ScaleDisplay extends HTMLElement {
     </table>`;
   }
 
-  get triadsAboveHtml() {
+  get triadsFromBaseHtml() {
     return html` <table class="table mt-2 border border-5 fs-3">
       <tr>
         ${this.fifthAboveScaleLetters.map(
@@ -122,7 +132,7 @@ class ScaleDisplay extends HTMLElement {
     </table>`;
   }
 
-  get triadsBellowHtml() {
+  get triadsFromThirdsHtml() {
     return html` <table class="table mt-2 border border-5 fs-3">
       <tr>
         ${this.scaleLetters.map(
@@ -140,6 +150,95 @@ class ScaleDisplay extends HTMLElement {
         )}
       </tr>
     </table>`;
+  }
+
+  get triadsFromThirdsHtml() {
+    return html` <table class="table mt-2 border border-5 fs-3">
+      <tr>
+        ${this.scaleLetters.map(
+          (letter) => html`<td class="bg-info-subtle fw-bold">${letter}</td>`
+        )}
+      </tr>
+      <tr>
+        ${this.fifthAboveScaleLetters.map(
+          (letter) => html`<td class="bg-info-subtle">${letter}</td>`
+        )}
+      </tr>
+      <tr>
+        ${this.sixthBellowScaleLetters.map(
+          (letter) => html`<td class="bg-info-subtle">${letter}</td>`
+        )}
+      </tr>
+    </table>`;
+  }
+
+  get triadsFromFifthsHtml() {
+    return html` <table class="table mt-2 border border-5 fs-3">
+      <tr>
+        ${this.sixthBellowScaleLetters.map(
+          (letter) => html`<td class="bg-info-subtle">${letter}</td>`
+        )}
+      </tr>
+      <tr>
+        ${this.scaleLetters.map(
+          (letter) => html`<td class="bg-info-subtle fw-bold">${letter}</td>`
+        )}
+      </tr>
+      <tr>
+        ${this.fifthAboveScaleLetters.map(
+          (letter) => html`<td class="bg-info-subtle">${letter}</td>`
+        )}
+      </tr>
+    </table>`;
+  }
+
+  get tetradsFromBaseHtml() {
+    return html` <table class="table mt-2 border border-5 fs-3">
+      <tr>
+        ${this.seventhAboveScaleLetters.map(
+          (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
+        )}
+      </tr>
+      <tr>
+        ${this.fifthAboveScaleLetters.map(
+          (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
+        )}
+      </tr>
+      <tr>
+        ${this.thirdAboveScaleLetters.map(
+          (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
+        )}
+      </tr>
+      <tr>
+        ${this.scaleLetters.map(
+          (letter) => html`<td class="bg-danger-subtle fw-bold">${letter}</td>`
+        )}
+      </tr>
+    </table>`;
+  }
+
+  getAccordionItem(id, title, body, expanded) {
+    return html`<div class="accordion-item">
+      <h2 class="accordion-header">
+        <button
+          class="accordion-button ${!expanded ? "collapsed" : undefined}"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#${id}"
+          aria-expanded="${expanded ? "true" : "false"}"
+          aria-controls="${id}"
+        >
+          ${title}
+        </button>
+      </h2>
+      <div
+        id="${id}"
+        class="accordion-collapse collapse ${expanded ? "show" : undefined}"
+        data-bs-parent="#accordionTables"
+      >
+        <div class="accordion-body">${body}</div>
+      </div>
+    </div>`;
   }
 
   render() {
@@ -187,8 +286,46 @@ class ScaleDisplay extends HTMLElement {
             ${this.key} ${this.scaleType.name}
           </h1>
 
-          ${this.scaleHtml} ${this.thirdsHtml} ${this.sixthsHtml}
-          ${this.triadsAboveHtml} ${this.triadsBellowHtml}
+          ${this.scaleHtml}
+
+          <div class="accordion" id="accordionTables">
+            ${this.getAccordionItem(
+              "thirdsTable",
+              "Thirds",
+              this.thirdsHtml,
+              true
+            )}
+            ${this.getAccordionItem(
+              "sixthsTable",
+              "Sixths",
+              this.sixthsHtml,
+              false
+            )}
+            ${this.getAccordionItem(
+              "triadsFromBaseTable",
+              "Triads",
+              this.triadsFromBaseHtml,
+              false
+            )}
+            ${this.getAccordionItem(
+              "triadsFromThirdsTable",
+              " Triads starting from the third",
+              this.triadsFromThirdsHtml,
+              false
+            )}
+            ${this.getAccordionItem(
+              "triadsFromFifthsTable",
+              "Triads starting from the fifth",
+              this.triadsFromFifthsHtml,
+              false
+            )}
+            ${this.getAccordionItem(
+              "tetradsFromBaseTable",
+              "Tetrads",
+              this.tetradsFromBaseHtml,
+              false
+            )}
+          </div>
         </div>
       `,
       this,
