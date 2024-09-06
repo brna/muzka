@@ -155,10 +155,6 @@ export function getScaleTypeByName(name = "major") {
   return scaleType;
 }
 
-export function getScaleTypeTones(name = "major") {
-  return getScaleTypeByName(name)?.tones;
-}
-
 function getToneStep(tone = "1") {
   let toneNumber = parseInt(tone.replace(/\D/g, ""));
   if (isNaN(toneNumber)) {
@@ -203,17 +199,38 @@ function getToneLetter(key = "C", tone = "1", sharp) {
   return getLetterByStep(step, sharp);
 }
 
-export function getScaleLetters(key = "C", type = "major") {
+export function getScaleTypeTones(name = "major", more = 1) {
+  let values = [...getScaleTypeByName(name).tones];
+  if (more > 0) {
+    for (let i = 0; i < more; i++) {
+      values.push(values[i]);
+    }
+  }
+  return values;
+}
+
+export function getScaleLetters(key = "C", type = "major", more = 1) {
   let scale = getScaleTypeByName(type);
   if (!scale) {
     console.warn(`getScaleLetters: scale type=${type} not found`);
     return undefined;
   }
-  return scale.tones.map((tone) => getToneLetter(key, tone));
+  let values = scale.tones.map((tone) => getToneLetter(key, tone));
+  if (more > 0) {
+    for (let i = 0; i < more; i++) {
+      values.push(values[i]);
+    }
+  }
+  return values;
 }
 
-export function getScaleLetterPairs(key = "C", type = "major", shift = 2) {
-  let baseValues = getScaleLetters(key, type);
+export function getScaleLetterPairs(
+  key = "C",
+  type = "major",
+  shift = 2,
+  more = 1
+) {
+  let baseValues = getScaleLetters(key, type, 0);
   let n = baseValues.length;
   let pairValues = [];
   for (let i = 0; i < n; i++) {
@@ -224,7 +241,13 @@ export function getScaleLetterPairs(key = "C", type = "major", shift = 2) {
     index %= n;
 
     let value = baseValues[index];
+
     pairValues.push(value);
+  }
+  if (more > 0) {
+    for (let i = 0; i < more; i++) {
+      pairValues.push(pairValues[i]);
+    }
   }
   return pairValues;
 }
