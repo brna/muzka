@@ -32,50 +32,15 @@ class ScaleDisplay extends HTMLElement {
     this.render();
   }
 
-  get scaleTypeTones() {
-    let values = getScaleTypeTones(this.scaleType.name);
-    return [...values, values[0]];
-  }
-
-  get scaleLetters() {
-    let values = getScaleLetters(this.key, this.scaleType.name);
-    return [...values, values[0]];
-  }
-
-  get thirdAboveScaleLetters() {
-    let values = getScaleLetterPairs(this.key, this.scaleType.name, 2);
-    return [...values, values[0]];
-  }
-
-  get fifthAboveScaleLetters() {
-    let values = getScaleLetterPairs(this.key, this.scaleType.name, 4);
-    return [...values, values[0]];
-  }
-
-  get sixthAboveScaleLetters() {
-    let values = getScaleLetterPairs(this.key, this.scaleType.name, 5);
-    return [...values, values[0]];
-  }
-
-  get seventhAboveScaleLetters() {
-    let values = getScaleLetterPairs(this.key, this.scaleType.name, 6);
-    return [...values, values[0]];
-  }
-
-  get sixthBellowScaleLetters() {
-    let values = getScaleLetterPairs(this.key, this.scaleType.name, -5);
-    return [...values, values[0]];
-  }
-
   get scaleHtml() {
     return html` <table class="table mt-2 border border-5 fs-3">
       <tr class="fs-6">
-        ${this.scaleTypeTones.map(
+        ${getScaleTypeTones(this.scaleType.name).map(
           (tone) => html`<th class="bg-secondary-subtle">${tone}</th>`
         )}
       </tr>
       <tr>
-        ${this.scaleLetters.map(
+        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
           (letter) => html`<td class="fw-bold">${letter}</td>`
         )}
       </tr>
@@ -85,12 +50,12 @@ class ScaleDisplay extends HTMLElement {
   get thirdsHtml() {
     return html` <table class="table mt-2 border border-5 fs-3">
       <tr>
-        ${this.thirdAboveScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, 2).map(
           (letter) => html`<td class="bg-warning-subtle">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.scaleLetters.map(
+        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
           (letter) => html`<td class="bg-warning-subtle fw-bold">${letter}</td>`
         )}
       </tr>
@@ -100,12 +65,12 @@ class ScaleDisplay extends HTMLElement {
   get sixthsHtml() {
     return html` <table class="table mt-2 border border-5 fs-3">
       <tr>
-        ${this.scaleLetters.map(
+        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
           (letter) => html`<td class="bg-success-subtle fw-bold">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.sixthBellowScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, -5).map(
           (letter) => html`<td class="bg-success-subtle">${letter}</td>`
         )}
       </tr>
@@ -115,17 +80,17 @@ class ScaleDisplay extends HTMLElement {
   get triadsFromBaseHtml() {
     return html` <table class="table mt-2 border border-5 fs-3">
       <tr>
-        ${this.fifthAboveScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, 4).map(
           (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.thirdAboveScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, 2).map(
           (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.scaleLetters.map(
+        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
           (letter) => html`<td class="bg-danger-subtle fw-bold">${letter}</td>`
         )}
       </tr>
@@ -135,17 +100,17 @@ class ScaleDisplay extends HTMLElement {
   get triadsFromThirdsHtml() {
     return html` <table class="table mt-2 border border-5 fs-3">
       <tr>
-        ${this.scaleLetters.map(
+        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
           (letter) => html`<td class="bg-info-subtle fw-bold">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.fifthAboveScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, 4).map(
           (letter) => html`<td class="bg-info-subtle">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.sixthBellowScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, -5).map(
           (letter) => html`<td class="bg-info-subtle">${letter}</td>`
         )}
       </tr>
@@ -155,17 +120,17 @@ class ScaleDisplay extends HTMLElement {
   get triadsFromThirdsHtml() {
     return html` <table class="table mt-2 border border-5 fs-3">
       <tr>
-        ${this.scaleLetters.map(
+        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
           (letter) => html`<td class="bg-info-subtle fw-bold">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.fifthAboveScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, 4).map(
           (letter) => html`<td class="bg-info-subtle">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.sixthBellowScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, -5).map(
           (letter) => html`<td class="bg-info-subtle">${letter}</td>`
         )}
       </tr>
@@ -175,17 +140,17 @@ class ScaleDisplay extends HTMLElement {
   get triadsFromFifthsHtml() {
     return html` <table class="table mt-2 border border-5 fs-3">
       <tr>
-        ${this.sixthBellowScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, -5).map(
           (letter) => html`<td class="bg-info-subtle">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.scaleLetters.map(
+        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
           (letter) => html`<td class="bg-info-subtle fw-bold">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.fifthAboveScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, 4).map(
           (letter) => html`<td class="bg-info-subtle">${letter}</td>`
         )}
       </tr>
@@ -195,22 +160,22 @@ class ScaleDisplay extends HTMLElement {
   get tetradsFromBaseHtml() {
     return html` <table class="table mt-2 border border-5 fs-3">
       <tr>
-        ${this.seventhAboveScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, 6).map(
           (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.fifthAboveScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, 4).map(
           (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.thirdAboveScaleLetters.map(
+        ${getScaleLetterPairs(this.key, this.scaleType.name, 2).map(
           (letter) => html`<td class="bg-danger-subtle">${letter}</td>`
         )}
       </tr>
       <tr>
-        ${this.scaleLetters.map(
+        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
           (letter) => html`<td class="bg-danger-subtle fw-bold">${letter}</td>`
         )}
       </tr>
