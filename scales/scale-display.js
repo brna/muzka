@@ -7,9 +7,13 @@ import {
   getScaleTypeByName,
   getScaleTypeTones,
   isNatural,
+  isFlat,
+  isSharp,
   getScaleChords,
   getModalScale,
+  getChromaticLetter,
 } from "./scales-api.js";
+import { convertToRoman } from "./utils.js";
 
 getScaleChords();
 
@@ -19,15 +23,22 @@ class ScaleDisplay extends HTMLElement {
     this.scaleTypeNames = getScaleTypeNames();
 
     let searchParams = new URLSearchParams(window.location.search);
-    console.log(`location=${location}, searchParams=`, searchParams);
 
     let key = searchParams.get("key");
-    console.log(
-      `### this.keys.includes(${key}): ${this.keys.includes(key)}`,
-      this.keys
-    );
-    if (key && this.keys.includes(key)) {
-      this.key = key;
+    if (key) {
+      if (this.keys.includes(key)) {
+        this.key = key;
+      } else if (isFlat(key)) {
+        let sharpKey = getChromaticLetter(key, true);
+        if (sharpKey) {
+          this.key = sharpKey;
+        }
+      } else if (isSharp(key)) {
+        let flatKey = getChromaticLetter(key, false);
+        if (flatKey) {
+          this.key = flatKey;
+        }
+      }
     }
     this.key ??= "C";
 
@@ -37,40 +48,43 @@ class ScaleDisplay extends HTMLElement {
     }
     this.scaleType ??= getScaleTypeByName("major");
 
+    document.title = `${this.key} ${this.scaleType.name} scale`;
+
     this.updateUrl();
 
     this.render();
   }
 
-  updateUrl() {
+  getUrl(key, scale) {
     let searchParams = new URLSearchParams(window.location.search);
-    searchParams.set("key", this.key);
-    searchParams.set("scale", this.scaleType.name);
-    const url =
-      window.location.origin +
-      window.location.pathname +
-      "?" +
-      searchParams.toString();
-    if (window.location.href !== url) {
+    //let urlEncodedKey = encodeURIComponent(key);
+    searchParams.set("key", key);
+    searchParams.set("scale", scale);
+    let loc = window.location;
+    return `${loc.origin}${loc.pathname}?${searchParams.toString()}`;
+  }
+
+  updateUrl() {
+    let url = this.getUrl(this.key, this.scaleType.name);
+    if (url !== window.location.href) {
       window.location.href = url; // reload
     }
   }
 
-  get() {
-    return new URLSearchParams(document.location.search).get("key");
-  }
-
-  onKeyClick(event) {
-    this.key = event.currentTarget.value || event.currentTarget.dataset.key;
-    console.log("onKeyClick: key=" + this.key);
-    this.updateUrl();
-    this.render();
-  }
-
-  onScaleTypeNameClick(event) {
-    this.scaleType =
-      getScaleTypeByName(event.currentTarget.value) ||
-      event.currentTarget.dataset.scale;
+  onScaleClick(event) {
+    let dataset = event.currentTarget.dataset;
+    if (!dataset.key && !dataset.scale) {
+      return;
+    }
+    if (dataset.key) {
+      this.key = dataset.key;
+    }
+    if (dataset.scale) {
+      let scaleType = getScaleTypeByName(dataset.scale);
+      if (scaleType) {
+        this.scaleType = scaleType;
+      }
+    }
     this.updateUrl();
     this.render();
   }
@@ -88,38 +102,36 @@ class ScaleDisplay extends HTMLElement {
             html`<td class="fw-bold" data-key="${letter}">${letter}</td>`
         )}
       </tr>
-      <tr>
-        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
-          (letter, index) => {
-            let modalScale = getModalScale(
-              this.scaleType,
-              this.scaleType.tones[index]
-            );
-            return html`<td
-              class="fw-bold"
-              data-key="${letter}"
-              @click=${this.onKeyClick}
-              style="font-size:8pt"
-            >
-              ${letter} ${this.modalScale?.name}
-            </td>`;
-          }
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
-          (letter) =>
-            html`<td
-              class="fw-bold"
-              data-key="${letter}"
-              @click=${this.onKeyClick}
-              style="font-size:8pt"
-            >
-              ${letter} ${this.scaleType.name}
-            </td>`
-        )}
-      </tr>
     </table>`;
+  }
+
+  get modesHtml() {
+    if (!this.scaleType.modes?.length) {
+      return undefined;
+    }
+
+    return html`<div class="row">
+      <span class="col btn">${this.key} ${this.scaleType.name} modes:</span>
+      ${getScaleLetters(this.key, this.scaleType.name, 1).map(
+        (letter, index) => {
+          let modalScale = getModalScale(
+            this.scaleType,
+            this.scaleType.tones[index]
+          );
+          if (!modalScale) {
+            return undefined;
+          }
+          let url = this.getUrl(letter, modalScale.name);
+
+          return html` <a href="${url}" class="col btn btn-light"
+            >${convertToRoman(index + 1)}.<br />
+            <span class="btn btn-light-outline"
+              >${letter} ${modalScale.name}</span
+            ></a
+          >`;
+        }
+      )}
+    </div>`;
   }
 
   get thirdsHtml() {
@@ -201,8 +213,8 @@ class ScaleDisplay extends HTMLElement {
             ${this.keys.map(
               (key) =>
                 html`<button
-                  @click=${this.onKeyClick}
-                  value="${key}"
+                  @click=${this.onScaleClick}
+                  data-key="${key}"
                   type="button"
                   class="col btn btn-sm w-100 ${key === this.key
                     ? "btn-primary"
@@ -219,8 +231,8 @@ class ScaleDisplay extends HTMLElement {
             ${this.scaleTypeNames.map(
               (name) =>
                 html`<button
-                  @click=${this.onScaleTypeNameClick}
-                  value="${name}"
+                  @click=${this.onScaleClick}
+                  data-scale="${name}"
                   type="button"
                   class="col btn btn-sm ms-1 ${name === this.scaleType.name
                     ? "btn-danger"
@@ -238,7 +250,7 @@ class ScaleDisplay extends HTMLElement {
               : undefined}
           </h1>
 
-          ${this.scaleHtml}
+          ${this.scaleHtml} ${this.modesHtml}
 
           <div class="accordion" id="accordionTables">
             ${this.getAccordionItem(
