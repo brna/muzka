@@ -131,7 +131,7 @@ let scaleTypes = [
   },
   {
     name: "double harmonic major",
-    aliases: ["arabic", "gipsy major"],
+    aliases: ["byzantine", "arabic", "gipsy major"],
     tones: ["1", "♭2", "3", "4", "5", "♭6", "7"],
     modes: [
       { name: "double harmonic minor", start: "4" },
@@ -325,7 +325,7 @@ function getToneStep(tone = "1") {
 
 function getToneLetter(key = "C", tone = "1", sharp) {
   if (sharp === undefined) {
-    if (isSharp(key)) {
+    if (isSharp(key) || isSharp(tone)) {
       sharp = true;
     } else if (isFlat(key)) {
       sharp = false;
@@ -361,7 +361,37 @@ export function getScaleLetters(key = "C", type = "major", more = 1) {
     console.warn(`getScaleLetters: scale type=${type} not found`);
     return undefined;
   }
-  let values = scale.tones.map((tone) => getToneLetter(key, tone));
+  let values = [];
+  for (let tone of scale.tones) {
+    let sharp = isSharp(key) || isSharp(tone);
+    let value = getToneLetter(key, tone, sharp);
+    if (isFlat(value) && values.includes(value.substring(0, 1))) {
+      let sharpValue = getToneLetter(key, tone, true);
+      if (sharpValue) {
+        values.push(sharpValue);
+        break;
+      }
+    }
+    values.push(value);
+  }
+  values = [...values].map((value, index, clonedValues) => {
+    let nextValue = clonedValues[index + 1];
+    if (
+      !isFlat(key) &&
+      nextValue &&
+      isFlat(value) &&
+      isNatural(nextValue) &&
+      value.substring(0, 1) === nextValue
+    ) {
+      let tone = scale.tones[index];
+      let sharpValue = getToneLetter(key, tone, true);
+      if (sharpValue) {
+        return sharpValue;
+      }
+    }
+    return value;
+  });
+
   if (more > 0) {
     for (let i = 0; i < more; i++) {
       values.push(values[i]);
