@@ -70,7 +70,7 @@ let scaleTypes = [
     name: "minor",
     aliases: ["aeolian"],
     tones: ["1", "2", "♭3", "4", "5", "♭6", "♭7"],
-    tonality: "3",
+    tonality: "♭3",
     modes: [
       { name: "locrian", start: "2" },
       { name: "major", start: "♭3" },
@@ -117,7 +117,7 @@ let scaleTypes = [
     name: "phrygian dominant",
     aliases: ["freygish"],
     tones: ["1", "♭2", "3", "4", "5", "♭6", "♭7"],
-    tonality: "♭3",
+    tonality: "♭6",
     modes: [
       { name: "harmonic minor", start: "4" },
       { name: "romanian minor", start: "5" },
@@ -147,7 +147,7 @@ let scaleTypes = [
       { name: "oriental", start: "2" },
       { name: "double harmonic major", start: "5" },
     ],
-    tonality: "5",
+    tonality: "♭3",
   },
   {
     name: "oriental",
@@ -156,7 +156,7 @@ let scaleTypes = [
       { name: "double harmonic major", start: "4" },
       { name: "double harmonic minor", start: "♭7" },
     ],
-    tonality: "7",
+    tonality: "4",
   },
   {
     name: "blues",
