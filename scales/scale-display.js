@@ -89,19 +89,35 @@ class ScaleDisplay extends HTMLElement {
   }
 
   get scaleHtml() {
-    return html` <table class="table mt-2 border border-5 fs-3">
-      <tr class="fs-6">
-        ${getScaleTypeTones(this.scaleType.name).map(
-          (tone) => html`<th class="bg-secondary-subtle">${tone}</th>`
-        )}
-      </tr>
-      <tr>
-        ${getScaleLetters(this.key, this.scaleType.name, 1).map(
-          (letter) =>
-            html`<td class="fw-bold" data-key="${letter}">${letter}</td>`
-        )}
-      </tr>
-    </table>`;
+    let tones = getScaleTypeTones(this.scaleType.name);
+    let letters = getScaleLetters(this.key, this.scaleType.name, 1);
+    let tonality = this.scaleType.tonality;
+    let tonalityIndex = tonality
+      ? tones.findIndex((tone) => tone === tonality)
+      : -1;
+    let tonalityLetter =
+      tonalityIndex > -1 ? letters[tonalityIndex] : undefined;
+
+    return html`
+      ${tonalityLetter
+        ? html`<div class="" style="font-size:8pt">
+            Tonality: ${tonalityLetter} major key
+          </div>`
+        : undefined}
+      <table class="table mt-0 border border-5 fs-3">
+        <tr class="fs-6">
+          ${tones.map(
+            (tone) => html`<th class="bg-secondary-subtle">${tone}</th>`
+          )}
+        </tr>
+        <tr>
+          ${letters.map(
+            (letter) =>
+              html`<td class="fw-bold" data-key="${letter}">${letter}</td>`
+          )}
+        </tr>
+      </table>
+    `;
   }
 
   get modesHtml() {
@@ -110,7 +126,7 @@ class ScaleDisplay extends HTMLElement {
     }
 
     return html`<div>
-      <span class="btn">Modal<br />scales:</span>
+      <span class="btn btn-sm">Modal<br />scales:</span>
       ${getScaleLetters(this.key, this.scaleType.name, 1).map(
         (letter, index) => {
           let modalScale = getModalScale(
@@ -122,7 +138,7 @@ class ScaleDisplay extends HTMLElement {
           }
           let url = this.getUrl(letter, modalScale.name);
 
-          return html` <a href="${url}" class="btn btn-light"
+          return html` <a href="${url}" class="btn btn-sm btn-light"
             >${convertToRoman(index + 1)}.<br />
             <span class="btn btn-light-outline"
               >${letter} ${modalScale.name}</span
