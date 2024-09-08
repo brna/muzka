@@ -281,16 +281,11 @@ class ScaleDisplay extends HTMLElement {
         class="accordion-collapse collapse ${expanded ? "show" : undefined}"
         data-bs-parent="#harmonyAccordion"
       >
-        <div class="accordion-body">${body}</div>
+        <div class="accordion-body">
+          ${body}<span id="harmony-accordion-end-${id}" />
+        </div>
       </div>
     </div>`;
-  }
-
-  showHarmonyAccordionItem(id) {
-    let button = this.querySelector(`#harmony-accordion-button-${id}`);
-    if (button) {
-      button.click();
-    }
   }
 
   getHarmonyIds() {
@@ -305,18 +300,28 @@ class ScaleDisplay extends HTMLElement {
 
   initHarmony() {
     let harmonyIds = this.getHarmonyIds();
-    this.harmony ??= harmonyIds[0];
-    if (!harmonyIds.includes(this.harmony)) {
-      this.harmony = harmonyIds[0];
+    if (this.harmony && !harmonyIds.includes(this.harmony)) {
+      this.harmony = undefined;
     }
     this.updateUrl();
     this.render();
+
+    let focus = (id) => {
+      this.querySelector(`#harmony-accordion-end-${id}`)?.scrollIntoView({
+        behavior: "smooth",
+      });
+    };
+
+    if (this.harmony) {
+      focus(this.harmony);
+    }
 
     for (let id of harmonyIds) {
       let el = this.querySelector(`#${id}`);
       el.addEventListener("shown.bs.collapse", () => {
         this.harmony = id;
         this.updateUrl();
+        focus(this.harmony);
       });
       el.addEventListener("hidden.bs.collapse", () => {
         this.harmony = undefined;
