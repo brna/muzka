@@ -194,6 +194,27 @@ class ScaleDisplay extends HTMLElement {
     `;
   }
 
+  get includedScalesHtml() {
+    if (!this.scaleType.included?.length) {
+      return undefined;
+    }
+
+    return html`<div>
+      <span class="btn btn-sm">Included scales:</span>
+      ${this.scaleType.included.map(
+        (includedScale) => html` <a
+          title="Change scale to ${this.key} ${includedScale.name} ..."
+          @click=${this.onScaleClick}
+          data-key="${this.key}"
+          data-scale="${includedScale.name}"
+          href="${this.getUrl(this.key, includedScale.name)}"
+          class="btn btn-sm btn-light border"
+          >${this.key} ${includedScale.name}</a
+        >`
+      )}
+    </div>`;
+  }
+
   get modesHtml() {
     if (!this.scaleType.modes?.length) {
       return undefined;
@@ -403,7 +424,7 @@ class ScaleDisplay extends HTMLElement {
                 </div>`
               : undefined
           }
-          ${this.scaleHtml} ${this.modesHtml}
+          ${this.scaleHtml} ${this.includedScalesHtml} ${this.modesHtml} 
 ${this.harmonyAccordionHtml}
          
         </div>
