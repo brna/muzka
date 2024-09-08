@@ -94,6 +94,12 @@ let scaleTypes = [
     ],
   },
   {
+    name: "jazz minor",
+    aliases: ["melodic minor ascending"],
+    tones: ["1", "2", "♭3", "4", "5", "6", "7"],
+    tonality: "1",
+  },
+  {
     name: "harmonic minor",
     aliases: [],
     tones: ["1", "2", "♭3", "4", "5", "♭6", "7"],
@@ -122,12 +128,6 @@ let scaleTypes = [
       { name: "harmonic minor", start: "4" },
       { name: "romanian minor", start: "5" },
     ],
-  },
-  {
-    name: "jazz minor",
-    aliases: ["melodic minor ascending"],
-    tones: ["1", "2", "♭3", "4", "5", "6", "7"],
-    tonality: "♭3",
   },
   {
     name: "double harmonic major",
@@ -163,6 +163,33 @@ let scaleTypes = [
     aliases: ["blues minor hexatonic"],
     tones: ["1", "♭3", "4", "♭5", "5", "♭7"],
     tonality: "♭7",
+  },
+  {
+    name: "bebop major",
+    tones: ["1", "2", "3", "4", "5", "♯5", "6", "7"],
+    aliases: ["major sixth diminished"],
+    modes: [{ name: "bebop minor", start: "6" }],
+    tonality: "1",
+  },
+  {
+    name: "bebop minor",
+    aliases: ["bebop natural minor", "bebop harmonic minor"],
+    included: [{ name: "minor" }, { name: "harmonic minor" }],
+    modes: [{ name: "bebop major", start: "♭3" }],
+    tones: ["1", "2", "♭3", "4", "5", "♭6", "♭7", "7"],
+    tonality: "♭3",
+  },
+  {
+    name: "bebop melodic minor",
+    aliases: ["minor sixth diminished scale"],
+    tones: ["1", "2", "♭3", "4", "5", "♯5", "6", "7"],
+    tonality: "1",
+  },
+  {
+    name: "bebop dominant",
+    tones: ["1", "2", "3", "4", "5", "6", "♭7", "7"],
+    included: [{ name: "major" }, { name: "mixolydian" }],
+    tonality: "4",
   },
 ];
 
