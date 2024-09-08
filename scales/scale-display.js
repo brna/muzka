@@ -375,12 +375,25 @@ class ScaleDisplay extends HTMLElement {
     </div>`;
   }
 
+  get reloadHtml() {
+    return html`<button
+      @click=${() => {
+        window.location.reload();
+      }}
+      type="button"
+      class="btn btn-sm float-end"
+    >
+      <i class="fa-solid fa-rotate-right"></i>
+    </button>`;
+  }
+
   render() {
     render(
       html`
         ${this.allKeysHtml} ${this.allScalesHtml}
         
           <h1 class="mt-2 text-center fw-bold">
+            ${this.reloadHtml}
             ${this.key} ${this.scaleType.name}
           </h1>
           ${
